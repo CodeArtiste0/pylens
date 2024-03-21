@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageURL = document.getElementById('image_url').value;
         const resultCount = document.getElementById('result_count').value;
         const selectedEngines = Array.from(document.querySelectorAll('input[name=search_engine]:checked')).map(input => input.value);
+        const imagePreviewElement = document.getElementById("imagePreview");
+
+        imagePreviewElement.src = imageURL;
 
         toggleVisibility(loadingScreen);
         toggleVisibility(alertBox, true);
