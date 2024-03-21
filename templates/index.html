@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyLens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gray: {
+                            850: '#181f29'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+
+<body class="bg-gray-800 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto my-8">
+        <div id="location" class="top-right bg-white opacity-70 text-gray-700 shadow-xl"></div>
+        <div id="title" class="text-4xl font-bold rainbow-text">Osint <b>Py</b>lens</div>
+
+        <div id="alert" class="m-3 shadow-xl hidden">
+            <div id="alert-title" class="rounded-t shadow-xl px-4 py-2 font-bold text-white"></div>
+            <div id="alert-body" class="rounded-b border border-t-0 px-4 py-3">
+                <p>something not ideal might be happening.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <form id="domainForm" action="/" method="post" class="max-w-sm mx-auto mb-6 relative">
+                <div class="mb-4">
+                    <label for="image_url" class="block text-sm font-bold mb-2">Put your image url :</label>
+                    <input type="text" name="image_url" id="image_url"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-4">
+                    <label for="result_count" class="block text-sm font-bold mb-2">Results count :</label>
+                    <select name="result_count" id="result_count"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                        <option value="unlimited">Unlimited</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="bg-gradient-to-r from-purple-400 to-blue-500 hover:from-pink-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-md"
+                    id="searchButton">
+                    <span>Search</span>
+                    <i id="loadingIcon" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                </button>
+            </form>
+        </div>
+
+        <div id="imagesResult" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 hidden"></div>
+
+        <div class="signature">
+            <img class="w-4 rounded-full mr-2"
+                src="https://i0.wp.com/wikibiostars.in/wp-content/uploads/2022/04/Hasbulla.jpg" alt="Signature">
+            <span>Made by Liroxs</span>
+        </div>
+
+        <div id="loadingScreen" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+            <div class="loader"></div>
+        </div>
+    </div>
+</body>
+
+</html>

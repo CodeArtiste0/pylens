@@ -1,0 +1,98 @@
+.loader {
+  border: 4px solid #6b46c1;
+  border-top: 4px solid #c1bebe;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.signature {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+body {
+  padding: 3px;
+  background-color: #6b46c1;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+.card-transition:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s;
+}
+
+#title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+ .rainbow-text {
+    background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    animation: moveGradient 3s ease infinite;
+  }
+
+  @keyframes moveGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+.image-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.image-details span,
+.image-details a {
+  font-size: 0.8rem;
+}
+
+.image-details a {
+  color: #3182ce;
+  text-decoration: none;
+}
+
+.image-details a:hover {
+  text-decoration: underline;
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.top-right {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
