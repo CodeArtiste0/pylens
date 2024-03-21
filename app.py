@@ -11,8 +11,9 @@ def index():
 
 @app.route('/fetch-data', methods=['POST'])
 def fetch_data():
+    print(request.form)
     image_url = request.form['image_url']
-    images, errors = main.search_image(image_url, langs)  # Modify languages as needed
+    images, errors = main.search_image(image_url, langs, request.form['search_engine'])  # Modify languages as needed
     if len(errors) != 0:
         return jsonify({"errors": [str(error) for error in errors]}), 400
     return jsonify(images)

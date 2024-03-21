@@ -10,24 +10,25 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const imageURL = document.getElementById('image_url').value;
         const resultCount = document.getElementById('result_count').value;
+        const selectedEngines = Array.from(document.querySelectorAll('input[name=search_engine]:checked')).map(input => input.value);
 
         toggleVisibility(loadingScreen);
         toggleVisibility(alertBox, true);
 
-        fetchAndDisplayResults(imageURL, resultCount)
+        fetchAndDisplayResults(imageURL, resultCount, selectedEngines)
             .catch(handleError)
             .finally(() => {
                 toggleVisibility(loadingScreen, true);
             });
     }
 
-    function fetchAndDisplayResults(imageURL, resultCount) {
+    function fetchAndDisplayResults(imageURL, resultCount, searchEngines) {
         return fetch('/fetch-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `image_url=${encodeURIComponent(imageURL)}&result_count=${encodeURIComponent(resultCount)}`
+            body: `image_url=${encodeURIComponent(imageURL)}&search_engine=${searchEngines}&result_count=${encodeURIComponent(resultCount)}`
         })
             .then(response => response.json())
             .then(data => displayResults(data, resultCount))

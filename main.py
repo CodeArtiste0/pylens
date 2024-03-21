@@ -5,12 +5,14 @@ import json
 from typing import Tuple
 from base64 import b64encode
 from urllib.parse import urlparse, quote
+from flask import Flask, request, render_template
 from search_engines.abs_search_engine import AbsSearchEngine
 from search_engines.bing import BingImageSearch
-
 from search_engines.google import GoogleImageSearch
 from search_engines.tineye import TineyeImageSearch
 from search_engines.yandex import YandexImageSearch
+
+app = Flask(__name__)
 
 def normalize_url(url):
     parsed_url = urlparse(url)
@@ -18,7 +20,6 @@ def normalize_url(url):
     normalized_path = quote(url_path)
     normalized_url = f'{parsed_url.scheme}://{parsed_url.netloc}{normalized_path}'
     return normalized_url
-
 
 def filter_unique_images(image_urls, processed_urls, lang):
     unique_images = []
@@ -29,7 +30,6 @@ def filter_unique_images(image_urls, processed_urls, lang):
             unique_images.append((img_url, img_ref_url, lang))
     return unique_images
 
-
 def read_langs(file_path):
     if os.path.exists(file_path):
         with open(file_path) as file:
@@ -38,23 +38,24 @@ def read_langs(file_path):
         print(f"Language file not found: {file_path}")
         return None
 
-
 def get_base64_image_uri(image_url, file_content):
     img_type = 'image/png' if image_url.endswith('.png') else 'image/jpeg'
     img_encoded = b64encode(file_content).decode()
-
     return f"data:{img_type};base64,{img_encoded}"
 
-def search_image(image_url, langs) -> Tuple:
+def search_image(image_url, langs, selected_engines) -> Tuple:
     processed_urls = set()
     all_images = []
+    search_engines = []
 
-    search_engines: list[AbsSearchEngine] = [
-        GoogleImageSearch(),
-        #BingImageSearch(),
-        YandexImageSearch(),
-        #TineyeImageSearch()
-    ]
+    if 'google' in selected_engines:
+        search_engines.append(GoogleImageSearch())
+    if 'bing' in selected_engines:
+        search_engines.append(BingImageSearch())
+    if 'yandex' in selected_engines:
+        search_engines.append(YandexImageSearch())
+    if 'tineye' in selected_engines:
+        search_engines.append(TineyeImageSearch())
 
     errors = []
 
@@ -64,7 +65,6 @@ def search_image(image_url, langs) -> Tuple:
                 html_content = search_engine.send_image(image_url, lang)
                 if html_content:
                     image_urls = search_engine.parse_results(html_content)
-                    #unique_images = filter_unique_images(image_urls, processed_urls, lang)
                     for img in image_urls:
                         all_images.append({
                             'image_url': img[0],
@@ -77,13 +77,15 @@ def search_image(image_url, langs) -> Tuple:
 
     return (all_images, errors)
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        image_url = request.form['image_url']
+        langs = read_langs('langs.txt') or ['fr', 'en', 'ru', "il"]
+        selected_engines = request.form.getlist('search_engine')
+        images, errors = search_image(image_url, langs, selected_engines)
+        return render_template('results.html', images=images, errors=errors)
+    return render_template('index.html')
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("nope, it needs an image!")
-        exit()
-
-    image_url = sys.argv[1]
-
-    langs = read_langs('langs.txt') or ['fr', 'en', 'ru', "il"]
-    images = search_image(image_url, langs)
-    print(json.dumps(images))
+    app.run(debug=True)
