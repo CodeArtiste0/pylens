@@ -175,27 +175,3 @@ document.addEventListener('DOMContentLoaded', () => {
         element.classList.toggle('hidden', hide);
     }
 });
-
-// Local time and city functionality
-function getCity() {
-    fetch('https://ipapi.co/json/')
-        .then(response => response.json())
-        .then(data => updateLocation(data.city))
-        .catch(error => console.error('Error fetching location data:', error));
-}
-
-function updateLocation(city) {
-    const locationDiv = document.getElementById('location');
-    locationDiv.innerHTML = `Your location: ${city}<br>Local time: <span id="currentTime"></span>`;
-    updateLocalTime();
-    setInterval(updateLocalTime, 1000);
-}
-
-function updateLocalTime() {
-    const currentTime = new Date().toLocaleTimeString('fr-FR', {
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-    });
-    document.getElementById('currentTime').textContent = currentTime;
-}
-
-getCity();

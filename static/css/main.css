@@ -82,17 +82,3 @@ body {
 .fa-spinner {
   animation: spin 1s linear infinite;
 }
-
-.hidden {
-  display: none !important;
-}
-
-.top-right {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-weight: bold;
-}
